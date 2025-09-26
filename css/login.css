@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'fifa-26';
+  src: url('Fuentes/fifa-26.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1c1c1c, #111);
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+
+header {
+  background: transparent; 
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
+}
+
+header .logo img {
+  max-height: 55px;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  transition: transform 0.3s ease;
+}
+
+header .logo img:hover {
+  transform: scale(1.05);
+}
+.inicio {
+
+display: flex;
+    gap: 20px;
+}
+
+.inicio i {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #ffffff;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.inicio i:hover {
+    transform: scale(1.2);
+    color: #00c3ff; 
+}
+
+
+
+.login-container {
+  margin: auto;
+  background: rgba(20, 20, 20, 0.8);
+  padding: 40px;
+  border-radius: 25px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+}
+
+.login-container .gif {
+  width: 120px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255,0,80,0.6);
+}
+
+.titulo {
+  font-family: 'fifa-26';
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+.login-form .form-control {
+  background-color: #1c1c1c;
+  color: #f1f1f1;
+  border: 2px solid #444;
+  border-radius: 20px;
+  padding: 10px 16px;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.login-form .form-control::placeholder {
+  color: #aaa;
+}
+
+.login-form .form-control:focus {
+  color: #00ffcc;
+  border-color: #00ffcc !important;
+  background-color: #1c1c1c;
+  box-shadow: 0 0 12px rgba(0,255,178,0.6) !important;
+  outline: none;
+}
+
+.btn-primary {
+  border-radius: 25px;
+  border: 2px solid #ff0050;
+  color: #ff0050;
+  background: transparent;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #ff0050;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255,0,80,0.8);
+}
+.link-registro {
+  color: #ffffff; /* color inicial (verde neón, puedes cambiarlo) */
+  font-weight: 400;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.link-registro strong:hover {
+  color: #00ffcc; /* el "Regístrate aquí" se invierte al pasar el mouse */
+}

@@ -1,0 +1,100 @@
+
+.modal-nueva form { display: flex; flex-direction: column; gap: 12px; }
+.modal-nueva label { font-size: .9rem; color: #aaa; }
+.modal-nueva h2{ justify-content: center;}
+.modal-nueva input, .modal-nueva select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  transition: .2s;
+}
+.modal-nueva input:focus, .modal-nueva select:focus {
+  border-color: #ff0080;
+  box-shadow: 0 0 10px rgba(255,0,128,.5);
+  outline: none;
+}
+
+
+.modal-nueva input[type="file"] {
+  background: #111;
+  color: #ddd;
+  border: 1px solid #444;
+  padding: 8px;
+}
+.modal-nueva input[type="file"]::file-selector-button {
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.modal-nueva input[type="file"]:hover::file-selector-button {
+  background: #333;
+}
+.modal {
+  display: none;                
+  position: fixed;
+  inset: 0;                      
+  background: rgba(0,0,0,0.7);   
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+
+.modal.show { display: flex; }
+
+/* ========== CAJA DEL MODAL ========== */
+.modal-content {
+  position: relative;
+  width: min(92vw, 560px);
+  background: #000;             
+  color: #fff;
+  border: 2px solid #00ffcc;     
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 0 25px rgba(0,255,178,0.5);
+}
+
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: #ffcc00;
+}
+.modal-content .close:hover { filter: brightness(1.2); }
+.modal-nueva { width: min(92vw, 480px); }
+.btn-publicar {
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  background: #ffcc00;
+  color: #111;
+  transition: 0.3s;
+}
+.btn-publicar:hover {
+  background: #00ffcc;
+  color: #111;
+  box-shadow: 0 0 15px rgba(0,255,178,0.8);
+}
+textarea {
+  background: #0707078c;
+  color: #ddd;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;       
+  resize: none;      
+  font-size: 14px;   
+  font-family: 'Segoe UI', sans-serif; 
+}

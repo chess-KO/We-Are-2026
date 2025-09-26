@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrador</title>
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/Admin.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+    <div class="logo">
+      <img src="img/2.png" alt="Logo Mundial" style="height:50px;">
+    </div>
+    <div class="flex-grow-1 mx-4">
+      <input type="text" class="form-control buscador" placeholder="Buscar mundial, jugador, país...">
+    </div>
+    <div class="inicio">
+      <a href="index.html" class="text-white"><i class="bi bi-house-fill fs-3"></i></a>
+    </div>
+  </header>
+
+  <!-- MENSAJES Y TOAST -->
+  <div class="container mt-3" id="mensajes"></div>
+  <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer" style="z-index:2000;"></div>
+
+  <!-- GRID PRINCIPAL -->
+  <main class="admin-grid container-fluid">
+
+    <!-- INFO DEL ADMINISTRADOR-->
+    <aside class="sidebar p-3 rounded shadow-sm">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Arturo-elias-ayub_%28cropped%29.jpg"
+        alt="Foto de perfil" class="perfil rounded-circle mb-3" style="width:100px;height:100px;">
+      <h5 class="fw-bold">Arturo Ayub</h5>
+      <p><i class="bi bi-envelope-fill"></i> Correo: <span class="fw-semibold">AyubAE@gmail.com</span></p>
+      <p><i class="bi bi-key-fill"></i> Contraseña: ********</p>
+      <button class="btn btn-outline-danger w-100 mt-2" onclick="cerrarSesion()">
+        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+      </button>
+    </aside>
+
+    <section class="contenido">
+      <h1 class="mb-4">Panel de Administración</h1>
+
+      <!-- Crear Categoría -->
+      <div class="card p-3 mb-4 shadow-sm">
+        <h4><i class="bi bi-tags-fill text-primary"></i> Crear Categoría</h4>
+        <div class="input-group mt-2">
+          <input type="text" class="form-control" placeholder="Ejemplo: Jugadas, Goles, Curiosidades">
+          <button class="btn btn-success" onclick="crearCategoria()">
+            <i class="bi bi-plus-circle"></i> Agregar
+          </button>
+        </div>
+      </div>
+
+      <!-- Crear Mundial -->
+      <div class="card p-3 mb-4 shadow-sm">
+        <h4><i class="bi bi-globe2 text-danger"></i> Crear página de Mundial</h4>
+        <form>
+          <div class="mb-2">
+            <label class="form-label">Nombre del Mundial</label>
+            <input type="text" class="form-control" placeholder="Qatar 2022">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Descripción breve</label>
+            <textarea class="form-control" rows="2" placeholder="Escribe un resumen del mundial..."></textarea>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Imagen destacada</label>
+            <input type="file" class="form-control" accept=".png, .jpg, .jpeg">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Logo del mundial</label>
+            <input type="file" class="form-control" accept=".png, .jpg, .jpeg">
+          </div>
+          <button type="button" class="btn btn-primary" onclick="crearMundial()">Crear Mundial</button>
+        </form>
+      </div>
+
+      <!-- Publicaciones pendientes -->
+      <div class="card p-3 mb-4 shadow-sm">
+        <h4><i class="bi bi-newspaper text-success"></i> Publicaciones pendientes</h4>
+        <div class="card-publicacion p-3 border rounded mt-3">
+          <div class="pub-header d-flex justify-content-between">
+            <div class="usuario d-flex align-items-center">
+              <div class="avatar rounded-circle me-2"
+                style="width:40px;height:40px;background-size:cover;background-image:url('https://i.pinimg.com/736x/79/9e/10/799e104095a372e5dfef0f0bb4b37b97.jpg');">
+              </div>
+              <span class="fw-semibold">Juan Pérez</span>
+            </div>
+            <div class="detalle text-muted">
+              <small>Mundial: Qatar 2022 | Categoría: Jugadas | Selección: Argentina</small>
+            </div>
+          </div>
+          <h5 class="mt-2">⚽ Penal que no era penal</h5>
+          <div class="media my-2">
+            <img src="https://a.espncdn.com/photo/2020/0331/r684914_1296x729_16-9.jpg" alt="Publicación"
+              class="img-fluid rounded">
+          </div>
+          <div class="fechas text-muted mb-2">
+            <small>Elaboración: 2022-11-21 18:00</small>
+          </div>
+          <div class="acciones">
+            <button class="btn btn-success btn-sm" onclick="aprobarPublicacion(this)">
+              <i class="bi bi-check2-circle"></i> Aprobar
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="eliminarPublicacion(this)">
+              <i class="bi bi-trash3"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+    <!-- CATEGORÍAS -->
+    <aside class="categorias-box p-3 rounded shadow-sm">
+      <h4><i class="bi bi-tags-fill"></i> Categorías</h4>
+      <ul id="listaCategorias">
+        <li>
+          <span class="categoria-nombre">Jugadas</span>
+          <div class="acciones">
+            <button class="btn-editar"><i class="bi bi-pencil-fill"></i></button>
+            <button class="btn-eliminar"><i class="bi bi-trash-fill"></i></button>
+          </div>
+        </li>
+        <li>
+          <span class="categoria-nombre">Curiosidades</span>
+          <div class="acciones">
+            <button class="btn-editar"><i class="bi bi-pencil-fill"></i></button>
+            <button class="btn-eliminar"><i class="bi bi-trash-fill"></i></button>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+  </main>
+
+  <!-- JS -->
+  <script src="js/Admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
