@@ -107,14 +107,41 @@ nav a:hover::after {
 
 
 main {
-  margin-top: -40px; /* sube el main 20px */
-  padding: 100px;
+  margin-top: 0; /* lo pega más al header */
+  padding: 60px 40px; /* menos padding */
+     /* limita el ancho */
+  margin-left: auto;
+  margin-right: auto;
   background: linear-gradient(135deg, #4a00e0, #ff0080);
   text-align: center;
   border-radius: 0 0 50px 50px;
   animation: fade-in 1s ease-in-out forwards;
-
+  position: relative;
+  overflow: hidden;
 }
+
+/* Botón de información alineado arriba a la derecha */
+.info-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+.btn-info-icon {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  transition: 0.3s;
+}
+
+.btn-info-icon:hover {
+  color: #ffeb3b;
+  text-shadow: 0 0 8px rgba(255, 235, 59, 0.8);
+}
+
+
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -230,7 +257,8 @@ width: 80px;
   border-radius: 50%; 
   background: none;   
   padding: 0;         
-  border: none;       
+  border: none;     
+     pointer-events: none;
 }
 
 
@@ -271,6 +299,7 @@ width: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 
@@ -312,7 +341,9 @@ width: 80px;
 .swiper-button-prev {
   left: 10px; 
 }
-
+.swiper .card{
+    pointer-events: auto; 
+}
 
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
@@ -527,7 +558,9 @@ width: 80px;
 }
 
 
-
+section.container {
+  margin-top: 60px; /* ajusta a tu gusto */
+}
 .publicacion.oculto {
   display: none !important; /* ocultas con clase */
 }

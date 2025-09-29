@@ -312,27 +312,47 @@ document.querySelectorAll(".like").forEach(likeBtn => {
 
 
 
+
+
 let mundialActual = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Escuchar clic en los botones del carrusel
-  document.querySelectorAll(".swiper-slide").forEach(slide => {
-    slide.addEventListener("click", () => {
-      document.getElementById("btnCrearPubli").style.display = "block";
-      document.getElementById("btnRegresar").style.display = "block";
+  // --- LIMPIAR src y data-mundial (elimina espacios accidentales)
+  document.querySelectorAll('img').forEach(img => {
+    const raw = img.getAttribute('src');
+    if (raw && raw !== raw.trim()) {
+      img.setAttribute('src', raw.trim());
+    }
+  });
+  document.querySelectorAll('.swiper-slide').forEach(slide => {
+    if (slide.dataset.mundial) slide.dataset.mundial = slide.dataset.mundial.trim();
+  });
 
-      // Guardar el mundial seleccionado
-      mundialActual = slide.dataset.mundial;
+  // --- delegación: un solo listener sobre wrapper (más robusto)
+  const wrapper = document.querySelector('.swiper-wrapper');
+  if (wrapper) {
+    wrapper.addEventListener('click', e => {
+      const slide = e.target.closest('.swiper-slide');
+      if (!slide) return; // click fuera de una slide
+      // Mostrar botones
+      const btnCrear = document.getElementById("btnCrearPubli");
+      const btnReg = document.getElementById("btnRegresar");
+      if (btnCrear) btnCrear.style.display = "block";
+      if (btnReg) btnReg.style.display = "block";
 
-      // Filtrar publicaciones
+      // Guardar Mundial seleccionado y filtrar
+      mundialActual = slide.dataset.mundial || null;
+      console.log("Mundial seleccionado:", mundialActual);
       filtrarPublicaciones(mundialActual);
 
-      // Mostrar botón editar SOLO cuando hay mundial seleccionado
+      // mostrar botones editar
       document.querySelectorAll(".btn-editar-pub").forEach(btn => {
         btn.style.display = "block";
       });
     });
-  });
+  } else {
+    console.warn("No se encontró .swiper-wrapper");
+  }
 });
 
 // FILTRO DE PUBLICACIONES

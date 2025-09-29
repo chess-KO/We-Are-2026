@@ -7,6 +7,7 @@
   <title>We are 2026</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/index_Drop.css">
   <link rel="stylesheet" href="css/modal_CrearPub.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -29,18 +30,33 @@
     </div>
   </header>
 
+
   <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-  <main class="text-center my-5">
-    <h1 class="display-3 fw-bold">We are 2026</h1>
-    <p class="lead"> El mundial es un torneo internacional de fútbol que se celebra cada cuatro años y en el que
-      participan selecciones
-      nacionales de diferentes países. Es organizado por la FIFA y reúne a las mejores
-      selecciones de fútbol de todo el mundo, quienes compiten por el título de campeón mundial.Te invitamos a ser parte
-      de este foro en dónde entre todos compartiremos datos interesantes sobre este evento. </p>
-    <a href="Login.html" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
-    <a href="registro.html" class="btn btn-primary btn-sm ms-2">Registrarse</a>
-  </main>
+<main class="position-relative">
+  <div class="info-btn">
+    <div class="dropdown">
+      <button class="btn btn-info-icon dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-info-circle"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-custom dropdown-menu-end">
+        <li><span class="dropdown-item">Solo puedes interactuar si has iniciado sesión</span></li>
+        <li><span class="dropdown-item">O te has registrado</span></li>
+        <li><span class="dropdown-item">Elige un mundial para publicar</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h1 class="display-3 fw-bold">We are 2026</h1>
+  <p class="lead">
+    El mundial es un torneo internacional de fútbol que se celebra cada cuatro años y en el que
+    participan selecciones nacionales de diferentes países. Es organizado por la FIFA y reúne a las mejores
+    selecciones de fútbol de todo el mundo, quienes compiten por el título de campeón mundial.
+    Te invitamos a ser parte de este foro en dónde entre todos compartiremos datos interesantes sobre este evento.
+  </p>
+  <a href="Login.html" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
+  <a href="registro.html" class="btn btn-primary btn-sm ms-2">Registrarse</a>
+</main>
 
   <!-- CARRUSEL DE LAS IMAGENES-->
   <section class="container mb-5">
@@ -72,19 +88,18 @@
             <img src="img/carrusel/L_1934.jpg" alt="Logo 1934" class="logo-img">
             <div class="caption">
               <h5>1934 - Italia</h5>
-              <p>Italia gana su primer título bajo Mussolini.</p>
+              <p>"Maracanazo"; Uruguay sorprende al gigante anfitrión.</p>
             </div>
           </div>
         </div>
 
         <div class="swiper-slide" data-mundial="1938">
-          <!--El data mundial es para hacer el filtrado de las publis y que se pueda publicar desde ahí -->
           <div class="card">
             <img src="img/carrusel/M_1938.jpg" alt="Mundial 1938" class="main-img">
             <img src="img/carrusel/L_1938.jpg" alt="Logo 1938" class="logo-img">
             <div class="caption">
               <h5>1938 - Francia</h5>
-              <p>Último antes de la Segunda Guerra Mundial; Italia repite campeonato.</p>
+              <p>"Maracanazo"; Uruguay sorprende al gigante anfitrión.</p>
             </div>
           </div>
         </div>
@@ -92,7 +107,7 @@
         <div class="swiper-slide" data-mundial="1950">
           <div class="card">
             <img src="img/carrusel/M_1950.jpg" alt="Mundial 1950" class="main-img">
-            <img src="img/carrusel/L_1950.jpg " alt="Logo 1950" class="logo-img">
+            <img src="img/carrusel/L_1950.jpg" alt="Logo 1950" class="logo-img">
             <div class="caption">
               <h5>1950 - Brasil</h5>
               <p>"Maracanazo"; Uruguay sorprende al gigante anfitrión.</p>
@@ -122,7 +137,7 @@
         <div class="swiper-slide" data-mundial="1962">
           <div class="card">
             <img src="img/carrusel/M_1962.jpg" alt="Mundial 1962" class="main-img">
-            <img src="img/carrusel/L_1962" alt="Logo 1962" class="logo-img">
+            <img src="img/carrusel/L_1962.png" alt="Logo 1962" class="logo-img">
             <div class="caption">
               <h5>1962 - Chile</h5>
               <p>Brasil bicampeón con Garrincha brillando</p>
@@ -192,7 +207,7 @@
         <div class="swiper-slide" data-mundial="1990">
           <div class="card">
             <img src="img/carrusel/M_1990.jpg" alt="Mundial 1990" class="main-img">
-            <img src="img/carrusel/L_1990" alt="Logo 1990" class="logo-img">
+            <img src="img/carrusel/L_1990.png" alt="Logo 1990" class="logo-img">
             <div class="caption">
               <h5>1990 - Italia</h5>
               <p>Alemania logra su tercer título en una final cerrada vs Argentina.</p>
@@ -214,7 +229,7 @@
         <div class="swiper-slide" data-mundial="1998">
           <div class="card">
             <img src="img/carrusel/M_1998.jpg" alt="Mundial 1998" class="main-img">
-            <img src="img/carrusel/L_1998" alt="Logo 1998" class="logo-img">
+            <img src="img/carrusel/L_1998.png" alt="Logo 1998" class="logo-img">
             <div class="caption">
               <h5>1998 - Francia</h5>
               <p>Francia gana su primera Copa en casa con Zidane estrella.</p>
@@ -236,7 +251,7 @@
         <div class="swiper-slide" data-mundial="2006">
           <div class="card">
             <img src="img/carrusel/M_2006.jpg" alt="Mundial 2006" class="main-img">
-            <img src="img/carrusel/L_2006" alt="Logo 2006" class="logo-img">
+            <img src="img/carrusel/L_2006.png" alt="Logo 2006" class="logo-img">
             <div class="caption">
               <h5>2006 - Alemania</h5>
               <p>Italia tetracampeón; recordado por el cabezazo de Zidane.</p>
@@ -246,7 +261,7 @@
         <div class="swiper-slide" data-mundial="2010">
           <div class="card">
             <img src="img/carrusel/M_2010.jpg" alt="Mundial 2010" class="main-img">
-            <img src="img/carrusel/L_2010" alt="Logo 2010" class="logo-img">
+            <img src="img/carrusel/L_2010.png" alt="Logo 2010" class="logo-img">
             <div class="caption">
               <h5>2010 - Sudáfrica</h5>
               <p>Primer mundial africano; España campeón con gol de Iniesta.</p>
@@ -337,7 +352,7 @@
 
   <!--PUBLICACIONES-->
   <div id="dashboard" class="grid">
-   
+
 
 
     <div class="publicacion" data-mundial="2022">
@@ -698,15 +713,12 @@
     Facultad de Ciencias Físico Matemáticas 2025 <br>
     Licenciatura de Multimedia y Animación Digital
   </footer>
- 
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-  <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
-  <script src="js/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  <script src="js/crearpubli.js"></script>
+<script src="js/index.js"></script>
+<script src="js/crearpubli.js"></script>
 
 
 </body>
