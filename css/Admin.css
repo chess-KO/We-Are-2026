@@ -216,27 +216,37 @@ aside {
 }
 .btn-success {
   background: #1b1b1b;
-  border: 2px solid #08ffde;
+
 }
 .btn-success:hover {
   background: #08ffde; color: #1b1b1b;
   box-shadow: 0 0 12px rgba(2,82,44,0.7);
+ 
 }
-.btn-danger {
-  background: #1b1b1b;
-  border: 2px solid #ff08f3;
+.acciones .btn-success {
+  background: #1b1b1b !important;
+  color: #08ffde !important;
+  border: 2px solid #08ffde !important;
+  transition: all 0.3s ease;
 }
-.btn-danger:hover {
-  background:#ff08f3; color: #1b1b1b;
-  box-shadow: 0 0 12px rgba(255,0,68,.7);
+
+.acciones .btn-success:hover {
+  background: #08ffde !important;
+  color: #1b1b1b !important;
+  box-shadow: 0 0 8px rgba(8, 255, 222, 0.5) !important;
 }
-.btn-secondary {
-  background: #444;
-  border: none;
+
+.acciones .btn-danger {
+  background: #1b1b1b !important;
+  color: #ff08f3 !important;
+  border: 2px solid #ff08f3 !important;
+  transition: all 0.3s ease;
 }
-.btn-secondary:hover {
-  background: #666;
-  box-shadow: 0 0 12px rgba(255,255,255,.3);
+
+.acciones .btn-danger:hover {
+  background: #ff08f3 !important;
+  color: #1b1b1b !important;
+  box-shadow: 0 0 8px rgba(255, 8, 243, 0.5) !important;
 }
 
 /* CATEGORÍAS */

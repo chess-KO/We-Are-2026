@@ -1,9 +1,9 @@
 <?php
 session_start();
-include("conexion.php"); // tu archivo de conexión a BD
+include("conexion.php"); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_usuario = $_SESSION['id']; // asumiendo que guardas el id en la sesión
+    $id_usuario = $_SESSION['id']; 
 
     $nombre = $_POST['nombre'];
     $fecha = $_POST['fecha_nac'];
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nacionalidad = $_POST['nacionalidad'];
     $correo = $_POST['correo'];
     $pass = $_POST['pass'];
-    $genero = $_POST['gene']; // 👈 corregido
+    $genero = $_POST['gene']; 
 
     // Validar contraseña
     if (!preg_match('/^(?=.*[A-Z])(?=.*[a-zñ])(?=.*[\W_]).{8,}$/u', $pass)) {
