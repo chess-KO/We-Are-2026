@@ -1,5 +1,5 @@
 <?php
-require_once "conexion.php"; // tu archivo de conexión a la BD
+require_once "conexion.php"; 
 session_start();
 
 // Validar que el usuario haya iniciado sesión

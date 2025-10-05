@@ -45,10 +45,10 @@ header .form-control {
     transition: color 0.3s ease;
   }
   .like.active {
-  color: #ff0080; /* azul */
+  color: #ff0080; 
 }
   .like.active i {
-    color: #ff0080; /* cambia este color a tu preferencia */
+    color: #ff0080; 
   }
 
 header .form-control::placeholder {
@@ -221,11 +221,15 @@ section h4 {
   box-shadow: 0 0 10px rgba(255,0,80,0.6);
 }
 
+
+
+
+
 /* ==== CARDS ==== */
 .card {
   position: relative;
   border-radius: 15px;
-  overflow: hidden;
+  overflow: visible;
   background: #1a1a1a;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
@@ -240,17 +244,18 @@ section h4 {
 /* Imagen principal */
 .main-img {
   width: 100%;
-  height: 600px;
+  height: 550px;
   object-fit: cover;
   border-radius: 15px;
   display: block;
+  transition: height 0.3s ease;
 }
 
 /* Logo pequeño */
 .logo-img {
 width: 80px;
   height: 80px; 
-  object-fit: contain; /* o cover, según necesites */
+  object-fit: contain; 
   position: absolute;
   top: 20px;
   left: 10px;
@@ -264,14 +269,17 @@ width: 80px;
 
 .caption {
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   color: #fff;
-  background: rgba(0, 0, 0, 0.795);
-  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px 14px;
   border-radius: 10px;
+  max-width: 90%;
+  z-index: 2; 
+  transition: all 0.3s ease;
 }
 
 /* Título y descripción */
@@ -1001,36 +1009,66 @@ rd-comentario p {
 
 
 
+
+
+
+
+
+
 @media (max-width: 992px) {
   .swiper {
-    height: 500px;
+    height: 650px;
+  }
+  .main-img {
+    height: 420px;
+  }
+  .caption {
+    bottom: 14px;
+    padding: 8px 14px;
   }
 }
 
-/* Pantallas medianas */
+/* 📱 Tablets */
 @media (max-width: 768px) {
   .swiper {
-    height: 450px;
+    height: 600px;
+  }
+  .main-img {
+    height: 400px;
+  }
+  .caption {
+    font-size: 0.9rem;
+    bottom: 12px;
   }
 }
 
-/* Móviles chicos */
+/* 📲 Móviles pequeños */
 @media (max-width: 480px) {
   .swiper {
-    height: 600px;
-    padding-top: 20px;
-    padding-bottom: 40px;
-  }
- .swiper-slide {
-    transform: scale(0.9); /* reduce un poco todas las slides */
-    transition: transform 0.3s ease;
+    height: auto;
+    padding-top: 30px;
+    padding-bottom: 80px;
   }
 
-  .swiper-slide-active {
-    transform: scale(1); /* la activa se ve completa */
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
   }
 
- 
+  .main-img {
+    height: 380px; /* ✅ más alargada pero no desborda */
+  }
+
+  .caption {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 12px;
+    background: rgba(0, 0, 0, 0.85);
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
 }
-
-  

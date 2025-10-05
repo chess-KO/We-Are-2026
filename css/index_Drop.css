@@ -42,7 +42,7 @@
 .btn-info-icon {
   background: transparent;
   border: none;
-  color: #000000; /* turquesa */
+  color: #000000; 
   font-size: 20rem; /* tamaño del ícono */
   transition: 0.3s;
 }

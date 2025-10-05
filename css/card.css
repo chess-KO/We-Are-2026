@@ -1,0 +1,83 @@
+.card-back .card {
+  background-color: #0c0d0ec5; /* azul Bootstrap, puedes cambiarlo */
+  color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+/* Texto del reverso */
+.card-back h5 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.card-back ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.card-back ul li {
+  margin-bottom: 5px;
+  color: #f1f1f1;
+}
+
+/* === Asegurar que el flip no se recorte === */
+.card-flip {
+  perspective: 1000px;
+}
+
+.card-front,
+.card-back {
+  backface-visibility: hidden;
+  transition: transform 0.8s;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+  position: absolute;
+  width: 100%;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  width: 100%;
+}
+
+.card-flip.flipped .card-front {
+  transform: rotateY(180deg);
+}
+
+.card-flip.flipped .card-back {
+  transform: rotateY(0deg);
+}
+/* Posición de botones */
+
+.card-actions button,
+.back-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+
+
+.flip-btn {
+  background-color: #00f7ff;
+  color: #1b1b1b;
+}
+
+.card-actions button:hover,
+.back-actions button:hover {
+  transform: scale(1.1);
+}
+
+.back-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

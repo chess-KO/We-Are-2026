@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/index_Drop.css">
   <link rel="stylesheet" href="css/modal_CrearPub.css">
+  <link rel="stylesheet" href="css/card.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -33,30 +34,30 @@
 
   <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-<main class="position-relative">
-  <div class="info-btn">
-    <div class="dropdown">
-      <button class="btn btn-info-icon dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-info-circle"></i>
-      </button>
-      <ul class="dropdown-menu dropdown-custom dropdown-menu-end">
-        <li><span class="dropdown-item">->Solo puedes interactuar si has iniciado sesión</span></li>
-        <li><span class="dropdown-item">->Solo puedes interactuar si te has registrado</span></li>
-        <li><span class="dropdown-item">->Elige un mundial para publicar</span></li>
-      </ul>
+  <main class="position-relative">
+    <div class="info-btn">
+      <div class="dropdown">
+        <button class="btn btn-info-icon dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-info-circle"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-custom dropdown-menu-end">
+          <li><span class="dropdown-item">->Solo puedes interactuar si has iniciado sesión</span></li>
+          <li><span class="dropdown-item">->Solo puedes interactuar si te has registrado</span></li>
+          <li><span class="dropdown-item">->Elige un mundial para publicar</span></li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <h1 class="display-3 fw-bold">We are 2026</h1>
-  <p class="lead">
-    El mundial es un torneo internacional de fútbol que se celebra cada cuatro años y en el que
-    participan selecciones nacionales de diferentes países. Es organizado por la FIFA y reúne a las mejores
-    selecciones de fútbol de todo el mundo, quienes compiten por el título de campeón mundial.
-    Te invitamos a ser parte de este foro en dónde entre todos compartiremos datos interesantes sobre este evento.
-  </p>
-  <a href="Login.html" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
-  <a href="registro.html" class="btn btn-primary btn-sm ms-2">Registrarse</a>
-</main>
+    <h1 class="display-3 fw-bold">We are 2026</h1>
+    <p class="lead">
+      El mundial es un torneo internacional de fútbol que se celebra cada cuatro años y en el que
+      participan selecciones nacionales de diferentes países. Es organizado por la FIFA y reúne a las mejores
+      selecciones de fútbol de todo el mundo, quienes compiten por el título de campeón mundial.
+      Te invitamos a ser parte de este foro en dónde entre todos compartiremos datos interesantes sobre este evento.
+    </p>
+    <a href="Login.html" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
+    <a href="registro.html" class="btn btn-primary btn-sm ms-2">Registrarse</a>
+  </main>
 
   <!-- CARRUSEL DE LAS IMAGENES-->
   <section class="container mb-5">
@@ -67,18 +68,49 @@
       <div class="swiper-wrapper">
 
         <div class="swiper-slide" data-mundial="1930">
-          <div class="card">
-            <img src="https://www.laizquierdadiario.mx/IMG/jpg/seleccion_argentina_1930.jpg" alt="Mundial 1930"
-              class="main-img">
-            <img src="https://img.vavel.com/b/Uruguay_1930_World_Cup.jpg" alt="Logo 1930" class="logo-img">
-            <div class="caption">
-              <h5>1930 - Uruguay</h5>
-              <p>Primer mundial de la historia; Uruguay campeón en casa.</p>
+          <div class="card-flip">
+
+            <!-- Frente -->
+            <div class="card-front">
+              <div class="card">
+                <img src="https://www.laizquierdadiario.mx/IMG/jpg/seleccion_argentina_1930.jpg" alt="Mundial 1930"
+                  class="main-img">
+                <img src="https://img.vavel.com/b/Uruguay_1930_World_Cup.jpg" alt="Logo 1930" class="logo-img">
+
+                <div class="caption">
+                  <h5>1930 - Uruguay</h5>
+                  <p>Primer mundial de la historia; Uruguay campeón en casa.</p>
+                </div>
+
+                <div class="card-actions">
+                  <button class="edit-btn" title="Editar">✏️</button>
+                  <button class="delete-btn" title="Eliminar">🗑️</button>
+                  <button class="flip-btn" title="Ver más"><i class="bi bi-arrow-repeat"></i></button>
+                </div>
+              </div>
             </div>
-            <div class="card-actions">
-              <button class="edit-btn" title="Editar">✏️</button>
-              <button class="delete-btn" title="Eliminar">🗑️</button>
+
+            <!-- Reverso -->
+            <div class="card-back">
+              <div class="card">
+                <h5>Datos del Mundial 1930</h5>
+                <ul>
+                  <li><strong>Sedes:</strong> Montevideo</li>
+                  <li><strong>Mascota:</strong> No hubo</li>
+                  <li><strong>Campeón:</strong> Uruguay 🇺🇾</li>
+                  <li><strong>Subcampeón:</strong> Argentina 🇦🇷</li>
+                  <li><strong>Marcador final:</strong> 4 - 2</li>
+                  <li><strong>Final:</strong> Tiempo reglamentario</li>
+                  <li><strong>Líder de goleo:</strong> Guillermo Stábile (8 goles)</li>
+                  <li><strong>3° Lugar:</strong> Estados Unidos 🇺🇸</li>
+                  <li><strong>4° Lugar:</strong> Yugoslavia 🇷🇸</li>
+                </ul>
+                <div class="back-actions">
+                  <button class="flip-btn" title="Volver"><i class="bi bi-arrow-counterclockwise"></i></button>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -714,11 +746,13 @@
     Licenciatura de Multimedia y Animación Digital
   </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-<script src="js/index.js"></script>
-<script src="js/crearpubli.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/crearpubli.js"></script>
+  <script src="js/card.js"></script>
+
 
 
 </body>

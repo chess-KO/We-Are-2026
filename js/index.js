@@ -2,50 +2,47 @@
 window.addEventListener("load", () => {
 
   const swiper = new Swiper(".mySwiper", {
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
+  effect: "coverflow",
+  grabCursor: true,
+  centeredSlides: true,
+  slidesPerView: 1,
+  spaceBetween: 10,
 
-
-    slidesPerView: 1,
-    spaceBetween: 10,
-
-    coverflowEffect: {
-      rotate: 30,
-      stretch: 0,
-      depth: 200,
-      modifier: 1,
-      slideShadows: true,
+  coverflowEffect: {
+    rotate: 25,     // menos rotación para evitar deformación en móviles
+    stretch: 0,
+    depth: 180,     // profundidad ajustada
+    modifier: 1,
+    slideShadows: true,
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+  breakpoints: {
+    480: {
+      slidesPerView: 1,
+      spaceBetween: 10,
     },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
+    768: {
+      slidesPerView: 2,
+      spaceBetween: 15,
     },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
+    992: {
+      slidesPerView: 2,
+      spaceBetween: 20,
     },
+    1200: {
+      slidesPerView: 3,
+      spaceBetween: 25,
+    },
+  }
+});
 
-    // 👇 Breakpoints (van aumentando desde móviles)
-    breakpoints: {
-      480: {
-        slidesPerView: 1,
-        spaceBetween: 10,
-      },
-      768: {
-        slidesPerView: 2,
-        spaceBetween: 15,
-      },
-      992: {
-        slidesPerView: 2,
-        spaceBetween: 15,
-      },
-      1200: {
-        slidesPerView: 3,
-        spaceBetween: 20,
-      },
-    }
-  });
 
   const modal = document.getElementById("modalMundial");
   const closeBtn = modal.querySelector(".close-btn");
