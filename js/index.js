@@ -2,44 +2,62 @@
 window.addEventListener("load", () => {
 
   const swiper = new Swiper(".mySwiper", {
-  effect: "coverflow",
   grabCursor: true,
   centeredSlides: true,
-  slidesPerView: 1,
-  spaceBetween: 10,
 
-  coverflowEffect: {
-    rotate: 25,     // menos rotación para evitar deformación en móviles
-    stretch: 0,
-    depth: 180,     // profundidad ajustada
-    modifier: 1,
-    slideShadows: true,
-  },
+  slidesPerView: 1,
+  spaceBetween: 12,
+
+  effect: "slide",
+
   pagination: {
     el: ".swiper-pagination",
     clickable: true,
   },
+
   navigation: {
     nextEl: ".swiper-button-next",
     prevEl: ".swiper-button-prev",
   },
+
   breakpoints: {
     480: {
+      effect: "coverflow",
       slidesPerView: 1,
       spaceBetween: 10,
+      coverflowEffect: {
+        rotate: 15,
+        depth: 80,
+        slideShadows: false
+      }
     },
     768: {
+      effect: "coverflow",
       slidesPerView: 2,
       spaceBetween: 15,
+      coverflowEffect: {
+        rotate: 20,
+        depth: 140
+      }
     },
     992: {
+      effect: "coverflow",
       slidesPerView: 2,
       spaceBetween: 20,
+      coverflowEffect: {
+        rotate: 25,
+        depth: 180
+      }
     },
     1200: {
+      effect: "coverflow",
       slidesPerView: 3,
       spaceBetween: 25,
-    },
+      coverflowEffect: {
+        rotate: 25,
+        depth: 200
+      }
+    }
   }
 });
 
@@ -47,137 +65,169 @@ window.addEventListener("load", () => {
   const modal = document.getElementById("modalMundial");
   const closeBtn = modal.querySelector(".close-btn");
   const form = document.getElementById("formMundial");
-  let currentCard = null;
-  let currentImg = "";
-  let currentLogo = "";
 
-  // Abrir modal al editar
+  let currentSlide = null;
+
+  // === Abrir modal al editar ===
   document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = e.target.closest(".card");
-      currentCard = card;
+      btn.addEventListener("click", (e) => {
 
-      const title = card.querySelector("h5").innerText;
-      const desc = card.querySelector("p").innerText;
-      const img = card.querySelector(".main-img").src;
-      const logo = card.querySelector(".logo-img").src;
+          const slide = e.target.closest(".swiper-slide");
+          currentSlide = slide;
 
-      document.getElementById("nombreMundial").value = title;
-      document.getElementById("descMundial").value = desc;
-      currentImg = img;
-      currentLogo = logo;
+          const idMundial = slide.dataset.mundial;
 
-      modal.classList.add("show");
-    });
+          const cardFront = slide.querySelector(".card-front");
+          const cardBack  = slide.querySelector(".card-back");
+
+          // Título = sede + año
+          const titulo = cardFront.querySelector("h5").innerText;
+          const parts = titulo.split(" ");
+          const año   = parts.pop();
+          const sede  = parts.join(" ");
+
+          document.getElementById("añoMundial").value = año;
+          document.getElementById("sedeMundial").value = sede;
+          document.getElementById("descMundial").value = cardFront.querySelector("p").innerText;
+
+          const li = cardBack.querySelectorAll("li");
+          document.getElementById("mascotaMundial").value    = li[1].innerText.replace("Mascota:", "").trim();
+          document.getElementById("campeonMundial").value    = li[2].innerText.replace("Campeón:", "").trim();
+          document.getElementById("SubcampeonMundial").value = li[3].innerText.replace("Subcampeón:", "").trim();
+          document.getElementById("MarcadorFinalMundial").value = li[4].innerText.replace("Marcador final:", "").trim();
+          document.getElementById("FinalMundial").value      = li[5].innerText.replace("Final:", "").trim();
+          document.getElementById("LiderGolMundial").value   = li[6].innerText.replace("Líder de goleo:", "").trim();
+          document.getElementById("TerceroMundial").value    = li[7].innerText.replace("3° Lugar:", "").trim();
+          document.getElementById("CuartoMundial").value     = li[8].innerText.replace("4° Lugar:", "").trim();
+
+          modal.classList.add("show");
+      });
   });
 
-  // Cerrar modal
+  // === Cerrar modal ===
   closeBtn.addEventListener("click", () => modal.classList.remove("show"));
   window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.classList.remove("show");
+      if (e.target === modal) modal.classList.remove("show");
   });
 
-  // Guardar cambios
+  // === Guardar cambios ===
   form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!currentCard) return;
+      e.preventDefault();
 
-    const newTitle = document.getElementById("nombreMundial").value;
-    const newDesc = document.getElementById("descMundial").value;
-    const imgInput = document.getElementById("imgMundial");
-    const logoInput = document.getElementById("logoMundial");
+      if (!currentSlide) {
+          console.error("No hay slide seleccionado");
+          return;
+      }
 
-    currentCard.querySelector("h5").innerText = newTitle;
-    currentCard.querySelector("p").innerText = newDesc;
+      const idMundial = currentSlide.dataset.mundial;
+      const token = TOKEN;
+      const formData = new FormData();
+      formData.append("accion", "modificarMundial");
+      formData.append("Idmundial", idMundial);
 
-    // Imagen destacada
-    if (imgInput.files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        currentCard.querySelector(".main-img").src = reader.result;
-      };
-      reader.readAsDataURL(imgInput.files[0]);
-    } else {
-      currentCard.querySelector(".main-img").src = currentImg;
-    }
+      formData.append("Año", document.getElementById("añoMundial").value);
+      formData.append("Sede", document.getElementById("sedeMundial").value);
+      formData.append("Descripcion", document.getElementById("descMundial").value);
+      formData.append("Mascota", document.getElementById("mascotaMundial").value);
+      formData.append("Campeon", document.getElementById("campeonMundial").value);
+      formData.append("Subcampeon", document.getElementById("SubcampeonMundial").value);
+      formData.append("MarcadorFinal", document.getElementById("MarcadorFinalMundial").value);
+      formData.append("Final", document.getElementById("FinalMundial").value);
+      formData.append("Lidergoleo", document.getElementById("LiderGolMundial").value);
+      formData.append("Tercerlugar", document.getElementById("TerceroMundial").value);
+      formData.append("Cuartolugar", document.getElementById("CuartoMundial").value);
 
-    // Logo del mundial
-    if (logoInput.files.length > 0) {
-      const readerLogo = new FileReader();
-      readerLogo.onload = () => {
-        currentCard.querySelector(".logo-img").src = readerLogo.result;
-      };
-      readerLogo.readAsDataURL(logoInput.files[0]);
-    } else {
-      currentCard.querySelector(".logo-img").src = currentLogo;
-    }
+      // Archivos (BLOB)
+      const fotoInput = document.getElementById("imgMundial");
+      const logoInput = document.getElementById("logoMundial");
 
-    alert("✅ Mundial editado correctamente");
-    modal.classList.remove("show");
-    form.reset();
+      if (fotoInput.files.length > 0) {
+          formData.append("Foto", fotoInput.files[0]);
+      }
+      if (logoInput.files.length > 0) {
+          formData.append("Logo", logoInput.files[0]);
+      }
+
+      fetch("api-rest/api.php", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + token
+          },
+          body: formData
+      })
+      .then(r => r.json())
+      .then(data => {
+          console.log(data);
+
+          if (data.estado === "ok") {
+              alert("Mundial actualizado correctamente");
+              modal.classList.remove("show");
+              form.reset();
+          } else {
+              alert(data.mensaje);
+          }
+      })
+      .catch(err => {
+          console.error("Error en fetch:", err);
+          alert("No se pudo comunicar con la API");
+      });
   });
+
+
 
   // Eliminar carta
   document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = e.target.closest(".swiper-slide");
-      if (confirm("¿Seguro que deseas eliminar este mundial?")) {
-        const index = Array.from(swiper.slides).indexOf(card);
-        if (index >= 0) {
-          swiper.removeSlide(index); // elimina el slide correctamente
-          swiper.update();          // actualiza Swiper
-          alert("🗑️ Mundial eliminado"); // confirmación
+      btn.addEventListener("click", async (e) => {
+
+        const slide = e.target.closest(".swiper-slide");
+        const idMundial = slide.dataset.mundial;
+        const token = TOKEN;
+        if (!confirm("¿Seguro que deseas eliminar este mundial?")) return;
+
+        const formData = new FormData();
+        formData.append("accion", "eliminarMundial");
+        formData.append("Idmundial", idMundial);
+
+        try {
+            const res = await fetch("api-rest/api.php", {
+                method: "POST",
+                headers: {
+                  "Authorization": "Bearer " + token
+                },
+                body: formData
+            });
+
+            const json = await res.json();
+            console.log("Respuesta eliminar:", json);
+
+            if (json.estado === "ok") {
+                // borrar del swiper
+                const index = Array.from(swiper.slides).indexOf(slide);
+                if (index >= 0) {
+                    swiper.removeSlide(index);
+                    swiper.update();
+                }
+
+                alert("🗑️ Mundial eliminado");
+            } else {
+                alert("⚠️ No se pudo eliminar: " + json.mensaje);
+            }
+
+        } catch (err) {
+            console.error("Error eliminando:", err);
+            alert("Error al comunicar con la API");
         }
-      }
-    });
+      });
   });
+
 });
-// Función para abrir modal y cargar comentarios
-const comentariosPorPublicacion = [
-  [
-    { 
-      nombre: "Pedro Gómez", 
-      avatar: "https://i.pinimg.com/236x/94/8f/91/948f912fa3cb07527c3dfa38ae449cfc.jpg", 
-      mensaje: "si,es muy triste",
-      fecha: "2025-09-12 10:30"
-    },
-    { 
-      nombre: "María López", 
-      avatar: "https://i.pinimg.com/236x/79/9e/10/799e104095a372e5dfef0f0bb4b37b97.jpg", 
-      mensaje: "Que grande argentina!",
-      fecha: "2025-09-12 11:00"
-    }
-  ],
-  [
-    { 
-      nombre: "Juan Pérez", 
-      avatar: "https://i.pinimg.com/736x/79/9e/10/799e104095a372e5dfef0f0bb4b37b97.jpg", 
-      mensaje: "Es un raro caso",
-      fecha: "2025-09-12 12:00"
-    }
-  ],
-  [
-    { 
-      nombre: "Ana Torres", 
-      avatar: "https://i.pinimg.com/236x/94/8f/91/948f912fa3cb07527c3dfa38ae449cfc.jpg", 
-      mensaje: "Increíble partido",
-      fecha: "2025-09-12 14:15"
-    }
-  ],
-  [
-    { 
-      nombre: "Luis Fernández", 
-      avatar: "https://i.pinimg.com/236x/94/8f/91/948f912fa3cb07527c3dfa38ae449cfc.jpg", 
-      mensaje: "que interesante",
-      fecha: "2025-09-12 15:20"
-    }
-  ]
-];
+
 
 function closeModal(selector) { 
   const modal = document.querySelector(selector); 
-  modal.style.display = 'none'; 
+  modal.style.display = 'none';
 }
+
 
 window.onclick = function(event) { 
   const modal = document.querySelector('#modalComentarios'); 
@@ -186,50 +236,148 @@ window.onclick = function(event) {
   } 
 };
 
-function openComentariosModal(btn) {
+async function openComentariosModal(btn) {
   const modal = document.querySelector('#modalComentarios');
   const container = document.querySelector('#comentariosContainer');
-
-  container.innerHTML = "";
+  container.innerHTML = "<p>Cargando comentarios...</p>";
 
   const publicacion = btn.closest('.publicacion');
-  const index = Array.from(document.querySelectorAll('.publicacion')).indexOf(publicacion);
-  modal.setAttribute("data-index", index);
-
-  comentariosPorPublicacion[index].forEach((c, i) => {
-    const comentario = crearComentarioHTML(c, index, i);
-    container.appendChild(comentario);
-  });
+  const idPublicacion = publicacion.getAttribute('data-idpublicacion');
+  modal.setAttribute("data-idpublicacion", idPublicacion);
 
   modal.style.display = 'flex';
+
+  try {
+    const formData = new FormData();
+    formData.append('accion', 'listarComentarios');
+    formData.append('Idpublicacion', idPublicacion);
+
+    const response = await fetch("api-rest/api.php", {
+      method: "POST",
+      headers: TOKEN ? { "Authorization": "Bearer " + TOKEN } : {},
+      body: formData
+    });
+
+    const raw = await response.text();
+    const data = JSON.parse(raw);
+
+    container.innerHTML = "";
+
+    if (Array.isArray(data)) {
+      if (data.length === 0) {
+        container.innerHTML = "<p class='text-muted'>No hay comentarios aún.</p>";
+      } else {
+        data.forEach(c => {
+          c.esPropio = Boolean(c.esPropio);
+          c.esAdmin = Boolean(c.esAdmin);
+
+          const comentario = crearComentarioHTML({
+            Idcomentario: c.Idcomentario, // ← CORRECTO
+            avatar: c.FotoUsuario || "img/default_avatar.png",
+            nombre: c.Alias,
+            mensaje: c.Texto,
+            fecha: c.Fecha,
+            esPropio: c.esPropio,
+            esAdmin: c.esAdmin
+          });
+
+          container.appendChild(comentario);
+        });
+      }
+    }
+
+  } catch (error) {
+    console.error("Error al cargar comentarios:", error);
+    container.innerHTML = "<p class='text-danger'>Error de conexión.</p>";
+  }
 }
 
-function agregarComentario(btn) {
+
+
+async function agregarComentario(btn) {
   const modal = btn.closest('.custom-modal');
   const input = modal.querySelector('.comentar input');
   const mensaje = input.value.trim();
-  if (mensaje === "") return; 
+  if (mensaje === "") return;
 
-  const index = modal.getAttribute("data-index");
-  const ahora = new Date();
-  const fecha = ahora.toLocaleString(); 
+  const idPublicacion = modal.getAttribute("data-idpublicacion");
+  const token = TOKEN;
 
-  const nuevoComentario = {
-    avatar: "https://i.pinimg.com/736x/79/9e/10/799e104095a372e5dfef0f0bb4b37b97.jpg", 
-    nombre: "Usuario",
-    mensaje: mensaje,
-    fecha: fecha
-  };
+  try {
+    const formData = new FormData();
+    formData.append('accion', 'insertarComentario');
+    formData.append('Idpublicacion', idPublicacion);
+    formData.append('Mensaje', mensaje);
 
-  comentariosPorPublicacion[index].push(nuevoComentario);
+    const response = await fetch("api-rest/api.php", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token },
+      body: formData
+    });
 
-  const container = modal.querySelector("#comentariosContainer");
-  const comentario = crearComentarioHTML(nuevoComentario, index, comentariosPorPublicacion[index].length - 1);
-  container.appendChild(comentario);
+    const data = await response.json();
 
-  input.value = "";
-  container.scrollTop = container.scrollHeight;
+    if (response.ok) {
+      input.value = "";
+      mostrarMensaje("Comentario agregado correctamente ✅");
+      await cargarComentarios(idPublicacion);
+    } else {
+      alert(data.message || "Error al agregar comentario");
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error de conexión con el servidor");
+  }
 }
+
+async function cargarComentarios(idPublicacion) {
+const container = document.querySelector('#comentariosContainer');
+  container.innerHTML = "<p>Cargando comentarios...</p>";
+
+  try {
+    const formData = new FormData();
+    formData.append('accion', 'listarComentarios');
+    formData.append('Idpublicacion', idPublicacion);
+
+    const response = await fetch("api-rest/api.php", {
+      method: "POST",
+      headers: TOKEN ? { "Authorization": "Bearer " + TOKEN } : {},
+      body: formData
+    });
+
+    const data = await response.json();
+    container.innerHTML = "";
+
+    if (response.ok && Array.isArray(data)) {
+      if (data.length === 0) {
+        container.innerHTML = "<p class='text-muted'>No hay comentarios aún.</p>";
+      } else {
+        data.forEach(c => {
+          const comentario = crearComentarioHTML({
+            Idcomentario: c.Idcomentario, // ← CORRECTO
+            avatar: c.FotoUsuario || "img/default_avatar.png",
+            nombre: c.Alias,
+            mensaje: c.Texto,
+            fecha: c.Fecha,
+            esPropio: c.esPropio,
+            esAdmin: c.esAdmin
+          });
+
+          container.appendChild(comentario);
+        });
+      }
+    } else {
+      container.innerHTML = "<p class='text-danger'>Error al cargar comentarios.</p>";
+    }
+
+  } catch (error) {
+    console.error("Error al recargar comentarios:", error);
+    container.innerHTML = "<p class='text-danger'>Error de conexión.</p>";
+  }
+}
+
+
 
 
 function mostrarMensaje(texto) {
@@ -240,77 +388,195 @@ function mostrarMensaje(texto) {
   setTimeout(() => msg.remove(), 2000);
 }
 
-function crearComentarioHTML(c, pubIndex, comIndex) {
+function crearComentarioHTML(c) {
   const div = document.createElement('div');
   div.classList.add('card-comentario');
+
   div.innerHTML = `
     <div class="usuario">
       <div class="avatar" style="background-image:url('${c.avatar}')"></div>
       <span class="nombre">${c.nombre}</span>
     </div>
+
     <p class="texto">${c.mensaje}</p>
+
     <div class="info">
       <span class="fecha">${c.fecha}</span>
-      <button class="btn-eliminar" title="Eliminar">&#128465;</button>
-      <button class="btn-editar" title="Editar">&#9998;</button>
+
+      ${c.esAdmin ? `<button class="btn-eliminar" title="Eliminar">&#128465;</button>` : ""}
+      ${c.esPropio ? `<button class="btn-editar" title="Editar">&#9998;</button>` : ""}
     </div>
   `;
 
-  // eliminar comentario
-  div.querySelector(".btn-eliminar").addEventListener("click", () => {
-    comentariosPorPublicacion[pubIndex].splice(comIndex, 1);
-    div.remove();
-    mostrarMensaje("Comentario eliminado ✅");
-  });
 
-  // editar comentario
-div.querySelector(".btn-editar").addEventListener("click", () => {
-  const texto = div.querySelector(".texto");
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = texto.textContent;
-  input.classList.add("input-editar");
+  // =========================================================
+  // =============== BOTÓN EDITAR =============================
+  // =========================================================
+  if (c.esPropio) {
+    const btnEdit = div.querySelector(".btn-editar");
 
-  // reemplazar texto por input
-  texto.replaceWith(input);
-  input.focus();
+    btnEdit.addEventListener("click", async () => {
+      console.log("ID CORRECTO:", c.Idcomentario);
 
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const nuevoTexto = input.value.trim();
-      if (nuevoTexto !== "") {
-        comentariosPorPublicacion[pubIndex][comIndex].mensaje = nuevoTexto;
-        const p = document.createElement("p");
-        p.classList.add("texto");
-        p.textContent = nuevoTexto;
-        input.replaceWith(p);
-        mostrarMensaje("Comentario editado ✏️");
+      const pTexto = div.querySelector(".texto");
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = c.mensaje;
+      input.className = "input-editar";
+
+      pTexto.replaceWith(input);
+      input.focus();
+
+      input.addEventListener("keydown", async (e) => {
+        if (e.key === "Enter") {
+          const nuevo = input.value.trim();
+          if (nuevo.length === 0) return;
+
+          const formData = new FormData();
+          formData.append("accion", "editarComentario");
+          formData.append("Idcomentario", c.Idcomentario); // ← CORRECTO
+          formData.append("Comentario", nuevo);
+
+          const response = await fetch("api-rest/api.php", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + TOKEN },
+            body: formData
+          });
+
+          const raw = await response.text();
+          console.log("RAW EDITAR:", raw);
+
+          let data;
+          try {
+            data = JSON.parse(raw);
+          } catch {
+            alert("Respuesta no válida del servidor");
+            return;
+          }
+
+          if (response.ok) {
+            const p = document.createElement("p");
+            p.className = "texto";
+            p.textContent = nuevo;
+            input.replaceWith(p);
+          } else {
+            alert("Error: " + (data.message || "No se pudo editar"));
+          }
+        }
+      });
+    });
+  }
+
+
+
+  // =========================================================
+  // ============== BOTÓN ELIMINAR ===========================
+  // =========================================================
+  if (c.esAdmin) {
+    const btnDel = div.querySelector(".btn-eliminar");
+
+    btnDel.addEventListener("click", async () => {
+      if (!confirm("¿Eliminar comentario?")) return;
+
+      const formData = new FormData();
+      formData.append("accion", "eliminarComentario");
+      formData.append("Idcomentario", c.Idcomentario); // ← CORRECTO
+
+      const response = await fetch("api-rest/api.php", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + TOKEN },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        div.remove();
+      } else {
+        alert(data.message);
       }
-    }
-  });
-});
+    });
+  }
 
   return div;
 }
+
+
+//PARA INTERACCIONES
+
+//Likes
 document.querySelectorAll(".like").forEach(likeBtn => {
   const likeCount = likeBtn.querySelector(".count");
+  const publicacion = likeBtn.closest(".publicacion");
+  const idPublicacion = publicacion.getAttribute("data-idpublicacion");
 
-  likeBtn.addEventListener("click", () => {
+  likeBtn.addEventListener("click", async () => {
+    const token = TOKEN; // inyectado desde PHP
     likeBtn.classList.toggle("active");
 
-    let count = parseInt(likeCount.textContent);
-    if (likeBtn.classList.contains("active")) {
-      likeCount.textContent = count + 1;
-    } else {
-      likeCount.textContent = count - 1;
+    try {
+      const formData = new FormData();
+      formData.append('accion', 'toggleLike');
+      formData.append('Idpublicacion', idPublicacion);
+
+      const response = await fetch("api-rest/api.php", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body: formData
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        likeCount.textContent = data.totalLikes;
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error al registrar like:", error);
     }
   });
 });
 
 
+//Vistas
+document.addEventListener("DOMContentLoaded", () => {
+  const publicaciones = document.querySelectorAll(".publicacion");
+  const token = TOKEN; // inyectado desde PHP
+
+  // Usamos IntersectionObserver para detectar cuando la publicación aparece
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(async entry => {
+      if (entry.isIntersecting) {
+        const pub = entry.target;
+        const idPublicacion = pub.getAttribute("data-idpublicacion");
+
+        try {
+          const formData = new FormData();
+          formData.append('accion', 'registrarVista');
+          formData.append('Idpublicacion', idPublicacion);
+
+          await fetch("api-rest/api.php", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token },
+            body: formData
+          });
+
+          observer.unobserve(pub); // Evita registrar más de una vez
+        } catch (error) {
+          console.error("Error al registrar vista:", error);
+        }
+      }
+    });
+  }, { threshold: 0.5 }); // 50% visible
+
+  publicaciones.forEach(pub => observer.observe(pub));
+});
 
 
 
+
+//Este wey es el que escucha los clicks en las tarjetas de mundial
 let mundialActual = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -339,8 +605,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Guardar Mundial seleccionado y filtrar
       mundialActual = slide.dataset.mundial || null;
-      console.log("Mundial seleccionado:", mundialActual);
+      console.log("ID del mundial seleccionado:", mundialActual);
+
+      //Esto filtra las publicaciones por año, despues lo cambiaré para que se filtren por ID del mundial
       filtrarPublicaciones(mundialActual);
+
+      // Guarda los datos visibles de la tarjeta (Sede y Año)
+      const sede = slide.querySelector('.caption h5')?.innerText.split(" ")[0] || "";
+      const anio = slide.querySelector('.caption h5')?.innerText.split(" ")[1] || "";
+
+      // Guarda temporalmente los datos del mundial seleccionado
+      sessionStorage.setItem("mundialSeleccionado", JSON.stringify({
+        id: mundialActual,
+        sede: sede,
+        anio: anio
+      }));
+      
 
       // mostrar botones editar
       document.querySelectorAll(".btn-editar-pub").forEach(btn => {
@@ -362,8 +642,11 @@ function filtrarPublicaciones(mundial) {
     } else {
       pub.style.display = "none";
     }
+
   });
 }
+
+
 
 
 // Evento para botón regresar
@@ -390,6 +673,8 @@ document.getElementById("btnRegresar").addEventListener("click", () => {
 });
 
 
+
+//Para editar publicaciones
 function activarEdicionPublicacion(btn) {
   if (!mundialActual) {
     alert("Solo puedes editar estando en una página de un mundial ⚽");
@@ -402,7 +687,6 @@ function activarEdicionPublicacion(btn) {
   const descripcion = publicacion.querySelector(".descripcion");
   const mundial = publicacion.querySelector(".mundial");
   const categoria = publicacion.querySelector(".categoria");
-  const seleccion = publicacion.querySelector(".seleccion");
   const imagen = publicacion.querySelector(".media img, .media video");
 
   // Título
@@ -423,37 +707,62 @@ function activarEdicionPublicacion(btn) {
     descripcion.replaceWith(inputDesc);
   }
 
+  
   // Categoría -> combo
   if (categoria && categoria.tagName.toLowerCase() !== "select") {
-    const select = document.createElement("select");
-    select.classList.add("input-editable");
+    const selectCategoria = document.createElement("select");
+    selectCategoria.classList.add("input-editable", "combo-categoria");
 
-    const opciones = ["Copas", "Jugadores", "Historia", "Noticias"];
-    opciones.forEach(op => {
-      const option = document.createElement("option");
-      option.value = op;
-      option.textContent = op;
-      if (categoria.textContent.includes(op)) option.selected = true;
-      select.appendChild(option);
-    });
+    // Cargar opciones desde la API
+    fetch("api-rest/api.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ accion: "traerCategorias" })
+    })
+    .then(res => res.json())
+    .then(categorias => {
+      categorias.forEach(c => {
+        const option = document.createElement("option");
+        option.value = c.Idcategoria;
+        option.textContent = `${c.Nombre}`;
+        if (categoria.textContent.includes(c.Nombre)) {
+          option.selected = true;
+        }
+        selectCategoria.appendChild(option);
+      });
+    })
+    .catch(err => console.error("Error cargando mundiales:", err));
 
-    categoria.replaceWith(select);
+    categoria.replaceWith(selectCategoria);
   }
-  if (mundial && mundial.tagName.toLowerCase() !== "input") {
-    const inputSelec = document.createElement("input");
-    inputSelec.type = "text";
-    inputSelec.value = mundial.textContent.replace("Mundial:","").trim();
-    inputSelec.classList.add("input-editable", "mundial");
-    mundial.replaceWith(inputSelec);
+  // === Combo de mundiales scrolleable ===
+  if (mundial && mundial.tagName.toLowerCase() !== "select") {
+    const selectMundial = document.createElement("select");
+    selectMundial.classList.add("input-editable", "combo-mundial");
+
+    // Cargar opciones desde la API
+    fetch("api-rest/api.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ accion: "traerMundiales" })
+    })
+    .then(res => res.json())
+    .then(mundiales => {
+      mundiales.forEach(m => {
+        const option = document.createElement("option");
+        option.value = m.Idmundial;
+        option.textContent = `${m.Sede} ${m.Año}`;
+        if (mundial.textContent.includes(m.Sede) || mundial.textContent.includes(m.Año)) {
+          option.selected = true;
+        }
+        selectMundial.appendChild(option);
+      });
+    })
+    .catch(err => console.error("Error cargando mundiales:", err));
+
+    mundial.replaceWith(selectMundial);
   }
-  // Selección
-  if (seleccion && seleccion.tagName.toLowerCase() !== "input") {
-    const inputSelec = document.createElement("input");
-    inputSelec.type = "text";
-    inputSelec.value = seleccion.textContent.replace("Selección:", "").trim();
-    inputSelec.classList.add("input-editable", "seleccion");
-    seleccion.replaceWith(inputSelec);
-  }
+  
 
   // Imagen -> input file con preview
   if (imagen && (imagen.tagName.toLowerCase() === "img" || imagen.tagName.toLowerCase() === "video")) {
@@ -500,77 +809,79 @@ function activarEdicionPublicacion(btn) {
 }
 
 function guardarPublicacion(publicacion, btn) {
+
+  const idPublicacion = publicacion.dataset.idpublicacion;
+
   const tituloInput = publicacion.querySelector("input.input-editable.titulo");
   const descInput = publicacion.querySelector("input.input-editable.descripcion");
-  const seleccionInput = publicacion.querySelector("input.input-editable.seleccion");
-  const mundialInput = publicacion.querySelector("input.input-editable.mundial");
-  const selectCat = publicacion.querySelector("select.input-editable");
+  const mundialSelect = publicacion.querySelector("select.combo-mundial");
+  const categoriaSelect = publicacion.querySelector("select.combo-categoria");
   const mediaPreview = publicacion.querySelector(".media-preview");
+  const fileInput = mediaPreview ? mediaPreview.querySelector("input[type=file]") : null;
 
-  // Título
-  if (tituloInput) {
-    const h3 = document.createElement("h3");
-    h3.classList.add("titulo");
-    h3.textContent = tituloInput.value;
-    tituloInput.replaceWith(h3);
+  // --- valores reales ---
+  const nuevoTitulo = tituloInput ? tituloInput.value : publicacion.querySelector(".titulo").textContent.trim();
+  const nuevaDescripcion = descInput ? descInput.value : publicacion.querySelector(".descripcion").textContent.trim();
+  const nuevoMundial = mundialSelect ? mundialSelect.value : publicacion.dataset.mundial;
+  const nuevaCategoria = categoriaSelect ? categoriaSelect.value : publicacion.querySelector(".categoria").dataset.idcategoria;
+
+  const formData = new FormData();
+  formData.append("accion", "modificarPublicacion");
+  formData.append("Idpublicacion", idPublicacion);
+  formData.append("Titulo", nuevoTitulo);
+  formData.append("Descripcion", nuevaDescripcion);
+  formData.append("Idmundial", nuevoMundial);
+  formData.append("Idcategoria", nuevaCategoria);
+
+  if (fileInput && fileInput.files.length > 0) {
+    formData.append("archivoNuevo", fileInput.files[0]);
   }
 
-  // Descripción
-  if (descInput) {
-    const h4 = document.createElement("h4");
-    h4.classList.add("descripcion");
-    h4.textContent = descInput.value;
-    descInput.replaceWith(h4);
-  }
+  fetch("api-rest/api.php", {
+      method: "POST",
+      headers: {
+          "Authorization": "Bearer " + TOKEN
+      },
+      body: formData
+  })
+  .then(async res => {
+      let text = await res.text();
+      console.log("RESP RAW:", text);
 
-  // Categoría
-  if (selectCat) {
-    const span = document.createElement("span");
-    span.classList.add("categoria");
-    span.innerHTML = `<strong>Categoría:</strong> ${selectCat.value}`;
-    selectCat.replaceWith(span);
-  }
+      // 🔥 Eliminar basura antes y después del JSON
+      text = text.trim();
 
-  // Selección
-  if (seleccionInput) {
-    const span = document.createElement("span");
-    span.classList.add("seleccion");
-    span.innerHTML = `<strong>Selección:</strong> ${seleccionInput.value}`;
-    seleccionInput.replaceWith(span);
-  }
-    if (mundialInput) {
-    const span = document.createElement("span");
-    span.classList.add("mundial");
-    span.innerHTML = `<strong>Mundial:</strong> ${mundialInput.value}`;
-    mundialInput.replaceWith(span);
-  }
+      // 🔥 Intentar detectar la parte JSON en caso de que venga mezclada con warnings
+      const jsonStart = text.indexOf("{");
+      const jsonEnd = text.lastIndexOf("}");
 
-  // Imagen / Video final
-  const mediaDiv = publicacion.querySelector(".media");
-  if (mediaPreview) {
-    const preview = mediaPreview.querySelector("img, video");
-    if (preview) {
-      mediaDiv.innerHTML = "";
-      mediaDiv.appendChild(preview);
-    }
-    mediaPreview.remove();
-  } else {
-    // Si no se seleccionó nada, restaurar original
-    if (publicacion.dataset.originalMedia) {
-      mediaDiv.innerHTML = publicacion.dataset.originalMedia;
-    }
-  }
+      if (jsonStart === -1 || jsonEnd === -1) {
+          console.error("Formato desconocido:", text);
+          return null;
+      }
 
-  // Actualizar fechas
-  const fechas = publicacion.querySelector(".fechas");
-  if (fechas) {
-    const ahora = new Date().toLocaleString();
-    const spans = fechas.querySelectorAll("span");
-    if (spans[0]) spans[0].textContent = `Elaboración: ${ahora}`;
-    if (spans[1]) spans[1].textContent = `Aprobación: ${ahora}`;
-  }
+      text = text.substring(jsonStart, jsonEnd + 1);
 
-  // Cambiar botón a Editar
+      try {
+          return JSON.parse(text);
+      } catch (e) {
+          console.error("Error parseando JSON:", e, text);
+          return null;
+      }
+  })
+  .then(data => {
+      if (data.success) {
+          alert("Publicación modificada ✔. Espera a que el Administrador la apruebe.");
+      } else {
+          alert("Error: " + data.message);
+      }
+  })
+  .catch(err => {
+      console.error("Error enviando modificación:", err);
+  });
+
+  // Restaurar botón
   btn.textContent = "Editar";
   btn.onclick = () => activarEdicionPublicacion(btn);
 }
+

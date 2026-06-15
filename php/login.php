@@ -1,8 +1,45 @@
 <?php
 session_start();
+require_once "../config/Database.class.php";
+require_once "../models/usuario.class.php";
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $database = new Database();
+    $db = $database->connect();
 
-$admin_user = "Arturo";
+    $usuario = new Usuario($db);
+    $usuario->alias        = $_POST['user_name2'] ?? '';
+    $usuario->pass         = $_POST['user_pass'] ?? '';
+
+    //obtener la informacion del usuario que se intenta logear
+    $row = $usuario->iniciarSesion();
+    
+
+    if ($row) {
+
+        // Verificar contraseña encriptada
+        
+
+        if (password_verify($usuario->pass, $row['Pass'])) {
+            // Guardar datos en sesión
+            $_SESSION['usuario'] = $row['Alias'];
+            $_SESSION['id_usuario'] = $row['Idusuario'];
+            
+            // Mantener sesión activa
+            // PHP mantendrá la sesión abierta mientras no se cierre el navegador o expire el tiempo de sesión
+            header("Location: ../index.php");
+            exit();
+        }
+    }
+
+    // Si falla login
+    echo "<script>alert('Usuario o contraseña incorrectos');
+          window.location.href='../login.php';</script>";
+}
+
+//---------------------
+
+/*$admin_user = "Arturo";
 $admin_pass = "Ayub23$";
 
 // Recibir datos del formulario
@@ -52,4 +89,4 @@ echo "<script>
     window.location.href='../login.html';
 </script>";
 exit();
-?>
+?>*/

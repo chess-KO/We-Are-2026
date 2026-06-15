@@ -1,0 +1,6 @@
+Array
+(
+    [mundiales] => 4
+    [categorias] => 2
+    [publicaciones] => 4
+)

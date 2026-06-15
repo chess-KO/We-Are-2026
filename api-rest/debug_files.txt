@@ -1,0 +1,13 @@
+Array
+(
+    [archivo] => Array
+        (
+            [name] => Ronaldo Cristiano.jpeg
+            [full_path] => Ronaldo Cristiano.jpeg
+            [type] => image/jpeg
+            [tmp_name] => E:\Programas\XAMPP\tmp\php3A5B.tmp
+            [error] => 0
+            [size] => 76978
+        )
+
+)

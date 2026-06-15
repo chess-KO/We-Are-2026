@@ -1,0 +1,48 @@
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: ahora sí?
+Idusuario: 23
+Idpublicacion: 45
+Mensaje: ya
+Idusuario: 25
+Idpublicacion: 45
+Mensaje: Sí, por fin
+Idusuario: 23
+Idpublicacion: 44
+Mensaje: Y en este también?
+Idusuario: 25
+Idpublicacion: 44
+Mensaje: Sí, en este también se puede
+Idusuario: 25
+Idpublicacion: 49
+Mensaje: Arriba jenny Rivera
+Idusuario: 23
+Idpublicacion: 53
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 49
+Mensaje: xd
+Idusuario: 23
+Idpublicacion: 49
+Mensaje: xd
+Idusuario: 24
+Idpublicacion: 62
+Mensaje: xd

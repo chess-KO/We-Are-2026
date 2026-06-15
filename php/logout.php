@@ -4,6 +4,6 @@ session_unset();
 session_destroy();
 
 // Redirigir al HTML inicial o al login
-header("Location: ../perfil.html"); 
+header("Location: ../index.php"); 
 exit();
 ?>

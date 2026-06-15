@@ -1,0 +1,22 @@
+POST:
+Array
+(
+    [accion] => modificarMundial
+    [Idmundial] => 7
+    [Año] => 1930
+    [Sede] => xd
+    [Descripcion] => xd
+    [Mascota] => xd
+    [Campeon] => xd
+    [Subcampeon] => xdd
+    [MarcadorFinal] => 2-1
+    [Final] => xd
+    [Lidergoleo] => xddd
+    [Tercerlugar] => xdddd
+    [Cuartolugar] => xddddd
+)
+
+FILES:
+Array
+(
+)

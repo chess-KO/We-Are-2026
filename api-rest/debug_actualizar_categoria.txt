@@ -1,0 +1,45 @@
+
+
+=== INICIO ===
+Array
+(
+    [accion] => actualizarCategoria
+    [Idcategoria] => 4
+    [Nombre] => NoPendejada
+    [Activo] => 1
+)
+Resultado del procedure:
+Array
+(
+    [Mensaje] => Categoría "NoPendejada" actualizada correctamente.
+)
+
+
+=== INICIO ===
+Array
+(
+    [accion] => actualizarCategoria
+    [Idcategoria] => 4
+    [Nombre] => 
+    [Activo] => 0
+)
+Resultado del procedure:
+Array
+(
+    [Mensaje] =>  Categoría "NoPendejada" desactivada correctamente.
+)
+
+
+=== INICIO ===
+Array
+(
+    [accion] => actualizarCategoria
+    [Idcategoria] => 5
+    [Nombre] => 
+    [Activo] => 0
+)
+Resultado del procedure:
+Array
+(
+    [Mensaje] =>  Categoría "Goles x2" desactivada correctamente.
+)

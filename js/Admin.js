@@ -25,23 +25,116 @@ function mostrarNotificacion(tipo, mensaje) {
 }
 
 // ==== FUNCIONES DE ACCIONES ====
-function crearCategoria() {
-  mostrarNotificacion("success", " Categoría creada con éxito.");
-}
+/*async function crearCategoria() {
+  const nombreCategoria = document.querySelector('.input-group input').value.trim();
+
+  if (!nombreCategoria) {
+    alert("Por favor, ingresa un nombre de categoría.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('accion', 'crearCategoria');
+  formData.append('nombre', nombreCategoria);
+
+  try {
+    const response = await fetch('../api-rest/api.php', {
+      method: 'POST',
+      body: formData
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    
+    } catch (err) {
+        console.error("La respuesta no contiene JSON válido.");
+        data = { message: "Error: la API no devolvió JSON." };
+      }
+
+      if (response.ok) {
+        alert(data.message || "Categoría creada correctamente");
+      } else {
+        alert(data.message || "Error al crear la categoría");
+      }
+
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    alert("No se pudo conectar con el servidor");
+  }
+
+}*/
 
 function crearMundial() {
   mostrarNotificacion("primary", " Mundial registrado correctamente.");
 }
 
-function aprobarPublicacion(btn) {
-  mostrarNotificacion("success", "Publicación aprobada.");
-  btn.closest(".card-publicacion").remove(); 
+async function aprobarPublicacion(idPublicacion) {
+  const token = TOKEN_ADMIN; // se inyecta desde PHP
+  const formData = new FormData();
+  formData.append("accion", "actualizarEstadoPublicacion");
+  formData.append("Idpublicacion", idPublicacion);
+  formData.append("NuevoEstado", 1); // 1 = Aprobada
+
+  try {
+    const response = await fetch("api-rest/api.php", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (response.ok) {
+      mostrarNotificacion("success", "✅ Publicación aprobada.");
+      document.querySelector(`button[onclick="aprobarPublicacion(${idPublicacion})"]`)
+        ?.closest(".card-publicacion")
+        ?.remove();
+    } else {
+      mostrarNotificacion("danger", data.message || "Error al aprobar publicación.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    mostrarNotificacion("danger", "Error de conexión con el servidor.");
+  }
 }
 
-function eliminarPublicacion(btn) {
-  mostrarNotificacion("danger", " Publicación eliminada.");
-  btn.closest(".card-publicacion").remove(); 
+async function eliminarPublicacion(idPublicacion) {
+  const token = TOKEN_ADMIN; // se inyecta desde PHP
+  const formData = new FormData();
+  formData.append("accion", "actualizarEstadoPublicacion");
+  formData.append("Idpublicacion", idPublicacion);
+  formData.append("NuevoEstado", 2); // 2 = Eliminada/Rechazada
+
+  try {
+    const response = await fetch("api-rest/api.php", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (response.ok) {
+      mostrarNotificacion("danger", "🗑️ Publicación eliminada.");
+      document.querySelector(`button[onclick="eliminarPublicacion(${idPublicacion})"]`)
+        ?.closest(".card-publicacion")
+        ?.remove();
+    } else {
+      mostrarNotificacion("warning", data.message || "No se pudo eliminar la publicación.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    mostrarNotificacion("danger", "Error de conexión con el servidor.");
+  }
 }
+
 
 function eliminarComentario(btn) {
   mostrarNotificacion("warning", " Comentario eliminado.");
@@ -51,7 +144,7 @@ function eliminarComentario(btn) {
 function cerrarSesion() {
   mostrarNotificacion("dark", " Sesión cerrada correctamente.");
 
-    window.location.href = "index.html";
+  window.location.href = "php/logout.php";
 }
 
 const listaCategorias = document.getElementById("listaCategorias");

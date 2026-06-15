@@ -1,0 +1,21 @@
+# Configuración local
+.env
+
+# Logs
+*.log
+
+# Caché
+cache_noticias.json
+
+# Archivos temporales
+debug_*.txt
+
+# VS Code
+.vscode/
+
+# Dependencias
+vendor/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

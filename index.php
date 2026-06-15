@@ -1,0 +1,492 @@
+<?php
+session_start();
+
+// Si el usuario inició sesión, debería existir el token en $_SESSION
+$token = $_SESSION['token'] ?? '';
+?>
+
+<?php
+// === 1️⃣ MUNDIALES Y CATEGORÍAS ===
+
+// URL completa de la API
+$apiUrl = "http://localhost/PCI-BDM/api-rest/api.php?accion=listarMundiales";
+
+// --- Nueva forma: usar cURL siempre para poder enviar cabeceras ---
+$ch = curl_init($apiUrl);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+// Si hay token, se envía en el encabezado Authorization
+if (!empty($token)) {
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer $token"
+    ]);
+}
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+// Convertir JSON
+$data = json_decode($response, true);
+
+// Separar mundiales y categorías
+$mundiales = $data['mundiales'] ?? [];
+$categorias = $data['categorias'] ?? [];
+
+// Validar
+if (!is_array($mundiales)) $mundiales = [];
+if (!is_array($categorias)) $categorias = [];
+?>
+
+<?php
+// === 2️⃣ PUBLICACIONES ===
+
+$buscar = $_GET['buscar'] ?? '';
+$sede   = $_GET['sede'] ?? '';
+$orden  = $_GET['ordenar'] ?? '';
+
+$params = [];
+
+if ($buscar !== '') $params['buscar'] = $buscar;
+if ($sede !== '')   $params['sede']   = $sede;
+if ($orden !== '')  $params['orden']  = $orden;
+if (!empty($params)) {
+
+  $query = http_build_query($params);
+
+  $apiUrlPublicaciones = "http://localhost/PCI-BDM/api-rest/api.php?accion=filtrarPublicaciones&$query";
+
+} else {
+
+  $apiUrlPublicaciones = "http://localhost/PCI-BDM/api-rest/api.php?accion=listarPublicaciones";
+}
+
+/*
+if ($busqueda !== '') {
+  $apiUrlPublicaciones = "http://localhost:8080/Proyecto%20PCI/RespaldosProyecto/2/PCI-BDM/api-rest/api.php?accion=buscarPublicaciones&texto=".$_GET['buscar'];
+} else {
+  $apiUrlPublicaciones = "http://localhost:8080/Proyecto%20PCI/RespaldosProyecto/2/PCI-BDM/api-rest/api.php?accion=listarPublicaciones";
+}*/
+
+$ch = curl_init($apiUrlPublicaciones);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+// También le enviamos el token
+if (!empty($token)) {
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer $token"
+    ]);
+}
+
+$responsePub = curl_exec($ch);
+curl_close($ch);
+
+// Debug opcional
+file_put_contents("debug_raw_pub.txt", $responsePub);
+
+// Convertir JSON
+$publicaciones = json_decode($responsePub, true) ?? [];
+file_put_contents("debug_index_publicaciones.txt", print_r($publicaciones, true));
+
+// Validar
+if (!is_array($publicaciones)) $publicaciones = [];
+?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We are 2026</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index_Drop.css">
+    <link rel="stylesheet" href="css/modal_CrearPub.css">
+    <link rel="stylesheet" href="css/card.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="css/noticias.css">
+
+
+  </head>
+
+  <body>
+
+    <header class="d-flex justify-content-between align-items-center p-3 bg-transparent shadow-sm">
+
+      <div class="logo">
+        <img src="img/2.png" alt="Logo Mundial" style="height:50px;">
+      </div>
+
+      <form method="GET" action="index.php" class="w-100">
+        <div class="flex-grow-1 mx-4">
+          <input type="hidden" name="sede" value="<?= htmlspecialchars($_GET['sede'] ?? '') ?>">
+          <input type="hidden" name="ordenar" value="<?= htmlspecialchars($_GET['ordenar'] ?? '') ?>">
+
+          <input type="text" name="buscar" class="form-control"
+          placeholder="Buscar mundial, jugador, país..."
+          value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>">
+        </div>
+      </form>
+
+
+      <div class="perfil">
+        <?php 
+        if (isset($_SESSION['usuarioSesion'])) {
+          // Si existe sesión, verificamos el tipo
+          if ($_SESSION['usuarioSesion']['Tipo'] == 1) { ?>
+            <a href="admin.php"><i class="bi bi-person-circle"></i></a>
+          <?php } else { ?>
+            <a href="perfil.php"><i class="bi bi-person-circle"></i></a>
+          <?php }
+        } else {
+          ?>
+            <a href="perfil.php"><i class="bi bi-person-circle"></i></a>
+          <?php
+          }
+        ?>
+        
+
+      </div>
+    </header>
+
+
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <main class="position-relative">
+      <div class="info-btn">
+        <div class="dropdown">
+          <button class="btn btn-info-icon dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-info-circle"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-custom dropdown-menu-end">
+            <li><span class="dropdown-item">->Solo puedes interactuar si has iniciado sesión</span></li>
+            <li><span class="dropdown-item">->Solo puedes interactuar si te has registrado</span></li>
+            <li><span class="dropdown-item">->Elige un mundial para publicar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h1 class="display-3 fw-bold">We are 2026</h1>
+      <p class="lead">
+        El mundial es un torneo internacional de fútbol que se celebra cada cuatro años y en el que
+        participan selecciones nacionales de diferentes países. Es organizado por la FIFA y reúne a las mejores
+        selecciones de fútbol de todo el mundo, quienes compiten por el título de campeón mundial.
+        Te invitamos a ser parte de este foro en dónde entre todos compartiremos datos interesantes sobre este evento.
+      </p>
+      <a href="Login.php" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
+      <a href="registro.php" class="btn btn-primary btn-sm ms-2">Registrarse</a>
+    </main>
+
+    <!-- CARRUSEL DE LAS IMAGENES-->
+    <section class="container mb-5">
+      <h4 class="mb-4">Historia de los Mundiales</h4>
+
+
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="contenedorMundiales">
+
+        <?php if (!empty($mundiales)): ?>
+            <?php foreach ($mundiales as $m): ?>
+              <div class="swiper-slide" data-mundial="<?= htmlspecialchars($m['Idmundial']) ?>">
+                <div class="card-flip">
+                  <!-- Frente -->
+                  <div class="card-front">
+                    <div class="card">
+                      <img src="<?= $m['Foto'] ?: 'img/default_mundial.png' ?>" alt="Mundial <?= htmlspecialchars($c['Año']) ?>" class="main-img">
+                      <img src="<?= $m['Logo'] ?: 'img/default_logo.png' ?>" alt="Logo <?= htmlspecialchars($m['Año']) ?>" class="logo-img">
+
+                      <div class="caption">
+                        <input type="hidden" name="idMundial" value="<?= htmlspecialchars($m['Idmundial']) ?>">
+                        <h5><?= htmlspecialchars($m['Sede']) ?> <?= htmlspecialchars($m['Año']) ?></h5>
+                        <p><?= htmlspecialchars($m['Descripcion']) ?></p>
+                      </div>
+
+                      <div class="card-actions">
+                        <?php if (isset($_SESSION['usuarioSesion']) && $_SESSION['usuarioSesion']['Tipo'] == 1): ?>
+                          <!-- Botones visibles solo para administradores -->
+                          <button class="edit-btn" title="Editar">✏️</button>
+                          <button class="delete-btn" title="Eliminar">🗑️</button>
+                        <?php endif; ?>
+
+                        <!-- Este botón siempre se muestra -->
+                        <button class="flip-btn" title="Ver más"><i class="bi bi-arrow-repeat"></i></button>
+                      </div>
+
+                          
+                    </div>
+                  </div>
+
+                  <!-- Reverso -->
+                  <div class="card-back">
+                    <div class="card">
+                      <h5>Datos del Mundial <?= htmlspecialchars($m['Año']) ?></h5>
+                        <ul>
+                          <li><strong>Sede:</strong> <?= htmlspecialchars($m['Sede']) ?></li>
+                          <li><strong>Mascota:</strong> <?= htmlspecialchars($m['Mascota']) ?></li>
+                          <li><strong>Campeón:</strong> <?= htmlspecialchars($m['Campeon']) ?></li>
+                          <li><strong>Subcampeón:</strong> <?= htmlspecialchars($m['Subcampeon']) ?></li>
+                          <li><strong>Marcador final:</strong> <?= htmlspecialchars($m['Marcadorfinal']) ?></li>
+                          <li><strong>Final:</strong> <?= htmlspecialchars($m['Final']) ?></li>
+                          <li><strong>Líder de goleo:</strong> <?= htmlspecialchars($m['Lidergoleo']) ?></li>
+                          <li><strong>3° Lugar:</strong> <?= htmlspecialchars($m['Tercerlugar']) ?></li>
+                          <li><strong>4° Lugar:</strong> <?= htmlspecialchars($m['Cuartolugar']) ?></li>
+                        </ul>
+                        <div class="back-actions">
+                        <button class="flip-btn" title="Volver"><i class="bi bi-arrow-counterclockwise"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <p class="text-center text-muted">No hay mundiales registrados aún.</p>
+          <?php endif; ?>        
+        
+        </div>
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+    <!--filtros-->
+    <section class="container mb-5">
+      <h4>Filtrar Mundiales</h4>
+      <div class="row g-2">
+
+        <!-- FILTRO POR SEDE -->
+        <div class="col-md-4">
+          <form method="GET" id="formFiltros">
+            <input type="hidden" name="buscar" value="<?= htmlspecialchars($_GET['buscar'] ?? '') ?>">
+            <select class="form-select" name="sede" onchange="document.getElementById('formFiltros').submit()">
+              <option value="">Selecciona país sede...</option>
+
+              <?php foreach ($mundiales as $m): ?>
+                <option value="<?= htmlspecialchars($m['Sede']) ?>"
+                  <?= (($_GET['sede'] ?? '') === $m['Sede']) ? 'selected' : '' ?>>
+                  <?= htmlspecialchars($m['Sede']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- FILTRO ORDENAR -->
+        <div class="col-md-4">
+            <select class="form-select" name="ordenar" onchange="document.getElementById('formFiltros').submit()">
+
+              <option value="">Ordenar por...</option>
+              <option value="1"   <?= ($_GET['ordenar'] ?? '') === '1' ? 'selected' : '' ?>>Cronológico</option>
+              <option value="2"   <?= ($_GET['ordenar'] ?? '') === '2' ? 'selected' : '' ?>>País</option>
+              <option value="3"  <?= ($_GET['ordenar'] ?? '') === '3' ? 'selected' : '' ?>>Más Likes</option>
+              <option value="4"    <?= ($_GET['ordenar'] ?? '') === '4' ? 'selected' : '' ?>>Más Comentarios</option>
+
+            </select>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!--PUBLICACIONES-->
+    <div id="dashboard" class="grid">
+      <?php if (!empty($publicaciones)): ?>
+        <?php foreach ($publicaciones as $p): ?>
+          <div class="publicacion" data-idpublicacion="<?= htmlspecialchars($p['Idpublicacion']) ?>"   data-mundial="<?= htmlspecialchars($p['Idmundial']) ?>">
+            <div class="pub-header">
+              <div class="usuario">
+                <div class="avatar"
+                  style="background-image: url('<?= $p['FotoUsuario'] ?? 'img/default_avatar.png' ?>');">
+                </div>
+                <span class="nombre"><?= htmlspecialchars($p['NombreUsuario']) ?></span>
+              </div>
+
+              <div class="detalle">
+                <span class="mundial">
+                  <strong>Mundial:</strong> <?= htmlspecialchars($p['Sede']) ?> <?= htmlspecialchars($p['Año']) ?>
+                </span>
+                <span class="categoria">
+                  <strong>Categoría:</strong> <?= htmlspecialchars($p['Categoria']) ?>
+                </span>
+              </div>
+            </div>
+
+            <h3 class="titulo"><?= htmlspecialchars($p['Titulo']) ?></h3>
+            <h4 class="descripcion"><?= htmlspecialchars($p['Descripcion']) ?></h4>
+
+            <div class="media">
+              <?php if (!empty($p['Archivo'])): ?>
+                <img src="<?= $p['Archivo'] ?>" alt="Imagen publicación">
+              <?php elseif (!empty($p['Ruta'])): ?>
+                <video controls>
+                  <source src="<?= $p['Ruta'] ?>" type="video/mp4">
+                </video>
+              <?php endif; ?>
+            </div>
+
+            <div class="fechas">
+              <span>Elaboración: <?= htmlspecialchars($p['Fecha']) ?></span>
+              <span>Aprobación: <?= htmlspecialchars($p['Fechaaprobacion'] ?? 'Pendiente') ?></span>
+            </div>
+
+            <div class="interacciones">
+              <span class="like">
+                <i class="bi bi-hand-thumbs-up"></i> <span class="count"><?= $p['Likes'] ?? 0 ?></span> likes
+              </span>
+              <span><i class="bi bi-chat-dots"></i> <?= $p['Comentarios'] ?? 0 ?> comentarios</span>
+              <span><i class="bi bi-eye"></i> <?= $p['Vistas'] ?? 0 ?> vistas</span>
+            </div>
+
+            <div class="acciones-comentarios">
+              <button class="btn-ver-comentarios" onclick="openComentariosModal(this)">
+                Ver comentarios
+              </button>
+            </div>
+
+            <!-- Botón editar solo para el usuario -->
+            <?php if (isset($_SESSION['usuarioSesion']) && $_SESSION['usuarioSesion']['Idusuario'] == $p['Idusuario']): ?>
+              <button class="btn-editar-pub" onclick="activarEdicionPublicacion(this)">Editar</button>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p class="text-center text-muted">Aún no hay publicaciones disponibles.</p>
+      <?php endif; ?>
+    </div>
+
+
+    
+    <div id="modalNuevaPub"></div> 
+    
+    <?php if (isset($_SESSION['usuarioSesion'])): ?>
+
+      <!-- Crear Publicación solo visible para un usuario logeado -->
+      <button id="btnCrearPubli" class="floating-btn" style="display:none;" onclick="openNuevaPub()">+</button>
+        
+    <?php endif; ?>
+
+
+    <button id="btnRegresar" class="floating-btn regresar" style="display:none;">⟲</button>
+
+    <!--CUANDO AUN NO SE A LOGEADO-->
+    <div id="modalAuth" class="custom-modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('#modalAuth')">&times;</span>
+        <h2>¡Ups!</h2>
+        <p> Registrate o iniciar sesión para poder publicar.</p>
+        <div class="modal-actions">
+          <a href="Login.php" class="btn btn-outline-primary">Iniciar sesión</a>
+          <a href="registro.php" class="btn btn-primary">Registrarse</a>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal del comentario-->
+    <div id="modalComentarios" class="custom-modal" data-index="0">
+      <div class="modal-content modal-comentarios">
+        <span class="close" onclick="closeModal('#modalComentarios')">&times;</span>
+        <h3>Comentarios</h3>
+
+        <div id="comentariosContainer"></div>
+
+        <div class="comentar">
+          <input type="text" placeholder="Escribe un comentario...">
+          <button onclick="agregarComentario(this)">Comentar</button>
+        </div>
+      </div>
+    </div>
+
+    <!--Solo disponible para Administrador-->
+    <!--Modal para editar -->
+    <div id="modalMundial" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Editar Mundial</h2>
+        <form id="formMundial">
+        <label for="AñoMundial">Año del Mundial:</label>
+        <input type="text" id="añoMundial" required>
+
+          <label for="sedeMundial">Sede:</label>
+          <input type="text" id="sedeMundial" required>
+
+          <label for="mascotaMundial">Mascota:</label>
+          <input type="text" id="mascotaMundial" required>
+
+          <label for="campeonMundial">Campeón:</label>
+          <input type="text" id="campeonMundial" required>
+          
+          <label for="SubcampeonMundial">Subcampeón:</label>
+          <input type="text" id="SubcampeonMundial" required>
+
+          <label for="LiderGolMundial">Líder de goleo:</label>
+          <input type="text" id="LiderGolMundial" required>
+
+          <label for="TerceroMundial">3° Lugar:</label>
+          <input type="text" id="TerceroMundial" required>
+          <label for="CuartoMundial">4° Lugar:</label>
+          <input type="text" id="CuartoMundial" required>
+
+          <label for="FinalMundial">Final</label>
+          <input type="text" id="FinalMundial" required>
+          
+          <label for="MarcadorFinalMundial">Marcador final:</label>
+          <input type="text" id="MarcadorFinalMundial" required>
+
+          <label for="descMundial">Descripción breve:</label>
+          <input type="text" id="descMundial" required>
+
+          <label for="logoMundial" class="custom-file-upload">Seleccionar logo</label>
+          <input type="file" id="logoMundial" accept="image/*" hidden>
+
+          <label for="imgMundial" class="custom-file-upload">Imagen destacada</label>
+          <input type="file" id="imgMundial" accept="image/*" hidden>
+
+          <button type="submit">Guardar cambios</button>
+        </form>
+      </div>
+    </div>
+
+    
+    <section class="container my-5" id="seccionNoticias">
+    <h2 class="mb-4 text-center fw-bold">Últimas noticias de fútbol</h2>
+    <div id="contenedorNoticias" class="row g-4 justify-content-center">
+      <!-- Aquí se insertarán las noticias dinámicamente -->
+    </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center p-3">
+      Facultad de Ciencias Físico Matemáticas 2025 <br>
+      Licenciatura de Multimedia y Animación Digital
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+      const categoriasData = <?= json_encode($categorias, JSON_UNESCAPED_UNICODE); ?>;
+    </script>
+
+    <script>
+    const usuarioSesion = <?= isset($_SESSION['usuarioSesion'])
+        ? json_encode($_SESSION['usuarioSesion'], JSON_UNESCAPED_UNICODE)
+        : 'null'; ?>;
+    </script>
+
+    <script>
+    const TOKEN = <?= json_encode($_SESSION['token'] ?? '') ?>;
+    </script>
+
+    <script src="js/index.js"></script>
+    <script src="js/crearpubli.js"></script>
+    <script src="js/card.js"></script>
+
+
+
+  </body>
+
+</html>

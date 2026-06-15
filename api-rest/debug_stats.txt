@@ -1,0 +1,21 @@
+Array
+(
+    [Host] => localhost:8080
+    [Connection] => keep-alive
+    [Content-Length] => 263
+    [sec-ch-ua-platform] => "Windows"
+    [Authorization] => Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IklkdXN1YXJpbyI6MjQsIkFsaWFzIjoiUGFzYWRvRGVCZXJuaSIsIlRpcG8iOjB9LCJleHAiOjE3NjM1MDg2MTl9.b278cc2c2400fddcf04dd7e095c3bd3fbe988d89aa692a0dde2849081c2bca1c
+    [User-Agent] => Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
+    [sec-ch-ua] => "Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"
+    [Content-Type] => multipart/form-data; boundary=----WebKitFormBoundaryXLpSbWONNB4GAqmH
+    [sec-ch-ua-mobile] => ?0
+    [Accept] => */*
+    [Origin] => http://localhost:8080
+    [Sec-Fetch-Site] => same-origin
+    [Sec-Fetch-Mode] => cors
+    [Sec-Fetch-Dest] => empty
+    [Referer] => http://localhost:8080/Proyecto%20PCI/RespaldosProyecto/2/PCI-BDM/perfil.php
+    [Accept-Encoding] => gzip, deflate, br, zstd
+    [Accept-Language] => es-ES,es;q=0.9
+    [Cookie] => PHPSESSID=c6n6hjhikggui74s1abmb8bs17
+)

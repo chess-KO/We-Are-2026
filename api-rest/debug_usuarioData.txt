@@ -1,0 +1,6 @@
+Array
+(
+    [Idusuario] => 24
+    [Alias] => PasadoDeBerni
+    [Tipo] => 0
+)

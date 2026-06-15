@@ -1,0 +1,6 @@
+Array
+(
+    [accion] => editarComentario
+    [Idcomentario] => 12
+    [Comentario] => xd x2
+)

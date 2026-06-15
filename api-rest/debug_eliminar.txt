@@ -1,0 +1,5 @@
+Array
+(
+    [accion] => eliminarMundial
+    [Idmundial] => 5
+)

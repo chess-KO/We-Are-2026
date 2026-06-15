@@ -1,10 +1,15 @@
 body {
+    display: flex;
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #1c1c1c, #111);
   color: #252525;
+    flex-direction: column;
+  min-height: 100vh;
 }
+
+
 @font-face {
   font-family: 'fifa-26';
   src: url('Fuentes/fifa-26.ttf');
@@ -107,6 +112,7 @@ nav a:hover::after {
 
 
 main {
+ 
   margin-top: 0; /* lo pega más al header */
   padding: 60px 40px; /* menos padding */
      /* limita el ancho */
@@ -404,6 +410,7 @@ width: 80px;
   width: 400px;
   max-width: 90%;
   position: relative;
+  pointer-events: auto;
 }
 
 .modal-content h2 {
@@ -502,20 +509,21 @@ width: 80px;
 }
 
 .custom-modal {
-  display: none; 
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
-  width: 100%; 
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-  z-index: 1000;
 
-           
-  justify-content: center;  
-  align-items: center;      
-  padding: 20px;            
-  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+
+  display: none;             /* oculto por defecto */
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;           /* asegúrate de que esté arriba */
+  overflow-y: auto;    
+  padding: 15px;
 }
 
 .custom-modal .modal-content {
@@ -696,15 +704,25 @@ select.input-editable {
   text-align: center;
   position: relative;
   box-shadow: 0 0 25px rgba(0,255,178,0.5);
+  
 }
 
 .modal-comentarios {
-  max-width: 600px;
   background: #1a1a1a;
-  border-radius: 15px;
-  padding: 20px;
   color: #fff;
+
+  padding: 20px;
+  border-radius: 15px;
+
+  max-width: 600px;
+  width: 100%;
+
+  text-align: center;
+  position: relative;
+
+  box-shadow: 0 0 25px rgba(0,255,178,0.5);
 }
+
  #comentariosContainer::-webkit-scrollbar {
     width: 8px;
   }
@@ -824,11 +842,7 @@ select.input-editable {
   font-weight: bold;
   color: #00ffcc;
 }
-rd-comentario p {
-  margin: 8px 0 4px;
-  font-size: 0.9rem;
-  color: #fff;
-}
+
 .card-comentario .fecha {
   font-size: 12px;
   color: #aaa;
@@ -1008,13 +1022,6 @@ rd-comentario p {
 }
 
 
-
-
-
-
-
-
-
 @media (max-width: 992px) {
   .swiper {
     height: 650px;
@@ -1042,33 +1049,143 @@ rd-comentario p {
   }
 }
 
-/* 📲 Móviles pequeños */
+/* Móviles pequeños */
+
+
 @media (max-width: 480px) {
+
   .swiper {
-    height: auto;
-    padding-top: 30px;
-    padding-bottom: 80px;
+    width: 100%;
+    min-height: 460px !important; /* evita colapso */
+    padding: 20px 0 70px;
+    overflow: visible !important;
   }
 
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 90%;
+  .swiper-wrapper {
+    align-items: center !important;
   }
 
+  .swiper-slide {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  
+  .card-flip {
+    position: relative;
+    width: 100%;
+    max-width: 330px;
+    height: 430px;              
+    perspective: 1000px;
+  }
+
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease-in-out;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* Cara frontal */
+  .card-front {
+    background: #111;
+    transform: rotateY(0deg);
+  }
+
+  /* Cara trasera */
+  .card-back {
+    background: #111;
+    transform: rotateY(180deg);
+  }
+
+  /* Flip activado */
+  .card-flip.flip .card-front {
+    transform: rotateY(-180deg);
+  }
+
+  .card-flip.flip .card-back {
+    transform: rotateY(0deg);
+  }
+
+  /* Imágenes */
   .main-img {
-    height: 380px; /* ✅ más alargada pero no desborda */
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+  }
+
+  .logo-img {
+    width: 80px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
   }
 
   .caption {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    transform: none;
-    margin-top: 12px;
-    background: rgba(0, 0, 0, 0.85);
-    font-size: 0.9rem;
-    padding: 8px 12px;
+    padding: 10px;
+    background: rgba(0,0,0,.75);
+    font-size: .9rem;
+  }
+
+  .card-actions,
+  .back-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    gap: 12px;
+  }
+
+  .card-back ul {
+    padding: 15px;
+    font-size: .9rem;
   }
 }
+
+
+#modalMundial .modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 10px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #ff08d673 transparent; /* Firefox */
+}
+
+/* Chrome, Edge, Safari */
+#modalMundial .modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+#modalMundial .modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#modalMundial .modal-content::-webkit-scrollbar-thumb {
+  background: #9b9b9b;
+  border-radius: 10px;
+}
+
+#modalMundial .modal-content::-webkit-scrollbar-thumb:hover {
+  background: #6f6f6f;
+}
+
+h2 {
+  color: white;          /* letras blancas */
+  font-family: "Poppins", sans-serif; /* o la fuente que quieras */
+}
+footer {
+  margin-top: auto;
+}
+
+  
+

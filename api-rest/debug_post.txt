@@ -1,0 +1,9 @@
+Array
+(
+    [accion] => crearPublicacion
+    [idmundial] => 6
+    [titulo] => xdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffffxdfffffffffffffffffffff
+    [categoria] => 3
+    [descripcion] => xd
+    [idusuario] => 25
+)
